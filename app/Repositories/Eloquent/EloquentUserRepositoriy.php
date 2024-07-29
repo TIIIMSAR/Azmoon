@@ -3,11 +3,11 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\User;
+use App\Repositories\Contracts\UserRepositorieInterface;
 use App\Repositories\Eloquent\EloquentBaseRepositoriy;
-use App\Repositories\Contracts\UserRepositoriyInterface;
 
 
-class EloquentUserRepositoriy extends EloquentBaseRepositoriy implements UserRepositoriyInterface
+class EloquentUserRepositoriy extends EloquentBaseRepositoriy implements UserRepositorieInterface
 {
     protected $model = User::class;
 

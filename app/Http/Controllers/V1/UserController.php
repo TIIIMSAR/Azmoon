@@ -6,16 +6,14 @@ use App\Repositories\Contracts\UserRepositorieInterface;
 
 class UserController extends Controller
 {
-    public function __construct(private UserRepositorieInterface $userRepository)
-    {
-        
+    public function __construct(UserRepositorieInterface $userRepository)
+    {  
+
     }
 
 
     public function store()
     {
-    //     $this->userRepository->create();
-        
         return response()->json(
             [
                 'success' => true,

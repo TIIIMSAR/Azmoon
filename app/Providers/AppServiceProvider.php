@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\UserRepositorieInterface;
 use App\Repositories\Eloquent\EloquentUserRepositoriy;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Support\ServiceProvider;
@@ -22,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->app->bind(EloquentUserRepositoriy::class, EloquentUserRepositoriy::class);
+        $this->app->bind(UserRepositorieInterface::class, EloquentUserRepositoriy::class);
     }
 
 }
