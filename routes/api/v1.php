@@ -14,10 +14,10 @@ use App\Http\Controllers\V1\UserController;
 | and give it the Closure to call when that URI is requested.
 |
 */ 
-
+    
 $router->group(['prefix' => 'api/v1'], function () use ($router){
     $router->group(['prefix' => 'users'], function () use ($router){
         $router->post('', 'V1\UserController@store');
-
+        $router->put('', 'V1\UserController@updateInfo');
     });
 });

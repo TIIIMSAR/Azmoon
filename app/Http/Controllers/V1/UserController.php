@@ -23,12 +23,12 @@ class UserController extends ApiController
             'password' => ['required'],
          ]);
 
-         $this->userRepository->create([[
+         $this->userRepository->create([
             'full_name' => $request->full_name,
             'email' => $request->email,
             'mobile' => $request->mobile,
             'password' => app('hash')->make($request->password) 
-         ]]);
+         ]);
 
 
             return $this->respondCreated('کاربر ایجاد شد ', [
@@ -40,5 +40,28 @@ class UserController extends ApiController
     }
 
 
+    public function updateInfo(Request $request)
+    {
+        
+        $this->validate($request, [
+            'id' => ['required'],
+            'full_name' => ['required', 'string', 'min:3', 'max:256'],
+            'email' => ['required', 'email'],
+            'mobile' => ['required', 'string'],
+         ]);
+
+         $this->userRepository->update($request->id, [
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+         ]);
+
+
+         return $this->respondSuccess('کابر با موفقیت بروز رسانی شد', [
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+         ]);
+    }
 
 }
