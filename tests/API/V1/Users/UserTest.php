@@ -22,13 +22,22 @@ class UserTest extends TestCase
         $this->seeJsonStructure([
             'success',
             'message',
-            'dats' => [
+            'data' => [
                 'full_name',
                 'email',
                 'mobile',
                 'password',
             ]
         ]);
+    }
+
+
+            // test validation requset
+    public function test_it_must_throw_a_exception_if_we_dont_send_properties()
+    {
+        $response = $this->call('POST', 'api/v1/users',[]); 
+        
+        $this->assertEquals(422, $response->status());
     }
 
 }
