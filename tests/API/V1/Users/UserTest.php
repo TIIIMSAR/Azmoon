@@ -87,4 +87,26 @@ class UserTest extends TestCase
         ]);
     }
 
+        
+    public function test_it_must_throw_a_exception_if_we_dont_send_properties_to_update_update()
+    {
+        $response = $this->call('PUT', 'api/v1/users/change-password',[]); 
+        
+        $this->assertEquals(422, $response->status());
+    }
+
+    public function test_should_delete_a_user()
+    {
+        $response = $this->call('DELETE', 'api/v1/users/', [
+            'id' => '111111111111'
+        ]);
+
+        $this->assertEquals('200', $response->status());
+
+        $this->seeJsonStructure([
+            'success',
+            'message',
+            'data',
+        ]);
+    }
 }
