@@ -19,5 +19,6 @@ $router->group(['prefix' => 'api/v1'], function () use ($router){
     $router->group(['prefix' => 'users'], function () use ($router){
         $router->post('', 'V1\UserController@store');
         $router->put('', 'V1\UserController@updateInfo');
+        $router->put('change-password', 'V1\UserController@updatePassword');
     });
 });
