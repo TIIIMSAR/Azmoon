@@ -16,4 +16,5 @@ interface RepositorieInterface
 
     public function find(int $id);
 
+    public function paginate(string $search = null, int $page, int $pagesize = 20);
 }

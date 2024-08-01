@@ -12,6 +12,20 @@ class UserController extends ApiController
     {  
     }
 
+
+    public function index(Request $request)
+    {
+        $this->validate($request, [
+            'search' => ['nullable', 'string'],
+            'page' => ['required', 'numeric'],
+            'pagesize' => ['nullable', 'numeric'],
+        ]);
+
+        $users =  $this->userRepository->paginate($request->search, $request->page, $request->pagesize ?? 20);
+        
+        return $this->respondSuccess('لیست کاربران', $users);
+    }
+
         
     public function store(Request $request)
     {
