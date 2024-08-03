@@ -2,28 +2,29 @@
 
 namespace App\Repositories\Json;
 
+use App\Entites\User\UserEntity;
+use App\Entites\User\UserJsonEntity;
 use App\Repositories\Contracts\RepositorieInterface;
 
 class JsonBaseRepository implements RepositorieInterface
 {
-
-    // این فایل اجرا نمیشود
+    protected $JsonModel; 
 
     public function create(array $data)
     {
-        if (file_exists('users.json')) {
-            $users = json_decode(file_get_contents('users.json'), true);
+        if (file_exists($this->JsonModel)) {
+            $users = json_decode(file_get_contents($this->JsonModel), true);
             $data['id'] = rand(1, 1000);
             array_push($users, $data);
-            file_put_contents('users.json', json_encode($users));
+            file_put_contents($this->JsonModel, json_encode($users));
         } else {
             $users = [];
             $data['id'] = rand(1, 1000);
             array_push($users, $data);
-            file_put_contents('users.json', json_encode($users));
+            file_put_contents($this->JsonModel, json_encode($users));
         }
 
-
+        return $data;
     }   
 
     public function update(int $id, array $data)
@@ -81,7 +82,12 @@ class JsonBaseRepository implements RepositorieInterface
 
     public function find(int $id)
     {
+        $users = json_decode(file_get_contents(base_path() . 'users.json'), true);
+            foreach($users as $user)
+                if($user['id'] == $id)
+                    return $user;
 
+            return [];
     }
 
 

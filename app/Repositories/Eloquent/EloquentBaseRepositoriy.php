@@ -10,7 +10,7 @@ class EloquentBaseRepositoriy implements RepositorieInterface
 
     public function create(array $data)
     {
-        $this->model::create($data);
+       return $this->model::create($data);
     }
 
     public function update(int $id, array $data)
@@ -56,4 +56,9 @@ class EloquentBaseRepositoriy implements RepositorieInterface
     {
         return $this->model::find($id);
     }    
+
+    public function paginate(string $search = null, int $page, int $pagesize = 20)
+    {
+        
+    }
 }

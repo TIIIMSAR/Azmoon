@@ -29,7 +29,7 @@ class UserController extends ApiController
         
     public function store(Request $request)
     {
-
+       
          $this->validate($request, [
             'full_name' => ['required', 'string', 'min:3', 'max:256'],
             'email' => ['required', 'email'],
@@ -37,20 +37,20 @@ class UserController extends ApiController
             'password' => ['required'],
          ]);
 
-         $this->userRepository->create([
+        $newUser = $this->userRepository->create([
             'full_name' => $request->full_name,
             'email' => $request->email,
             'mobile' => $request->mobile,
             'password' => app('hash')->make($request->password) 
          ]);
+       
+        return $this->respondCreated('کاربر ایجاد شد ', [
+            'full_name' => $newUser->getFullName(),
+            'email' => $newUser->getEmail(),
+            'mobile' => $newUser->getMobile(),
+            'password' => $newUser->getPassword(),
+        ]);
 
-
-            return $this->respondCreated('کاربر ایجاد شد ', [
-                'full_name' => $request->full_name,
-                'email' => $request->email,
-                'mobile' => $request->mobile,
-                'password' => $request->password,
-            ]);
     }
 
 

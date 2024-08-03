@@ -6,7 +6,6 @@ use App\Repositories\Contracts\ReasonableInterface;
 
 interface UserRepositorieInterface extends RepositorieInterface
 {
-
 }
 
 
