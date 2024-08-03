@@ -21,7 +21,7 @@ class UserController extends ApiController
             'pagesize' => ['nullable', 'numeric'],
         ]);
 
-        $users =  $this->userRepository->paginate($request->search, $request->page, $request->pagesize ?? 20);
+        $users =  $this->userRepository->paginate($request->search, $request->page, $request->pagesize ?? 20, ['full_name', 'mobile', 'email']);
         
         return $this->respondSuccess('لیست کاربران', $users);
     }
@@ -29,13 +29,13 @@ class UserController extends ApiController
         
     public function store(Request $request)
     {
-       
          $this->validate($request, [
             'full_name' => ['required', 'string', 'min:3', 'max:256'],
             'email' => ['required', 'email'],
             'mobile' => ['required', 'string'],
             'password' => ['required'],
          ]);
+
 
         $newUser = $this->userRepository->create([
             'full_name' => $request->full_name,
@@ -44,6 +44,7 @@ class UserController extends ApiController
             'password' => app('hash')->make($request->password) 
          ]);
        
+
         return $this->respondCreated('کاربر ایجاد شد ', [
             'full_name' => $newUser->getFullName(),
             'email' => $newUser->getEmail(),
@@ -64,7 +65,7 @@ class UserController extends ApiController
             'mobile' => ['required', 'string'],
          ]);
 
-         $this->userRepository->update($request->id, [
+        $user = $this->userRepository->update($request->id, [
             'full_name' => $request->full_name,
             'email' => $request->email,
             'mobile' => $request->mobile,
@@ -72,9 +73,9 @@ class UserController extends ApiController
 
 
          return $this->respondSuccess('کابر با موفقیت بروز رسانی شد', [
-            'full_name' => $request->full_name,
-            'email' => $request->email,
-            'mobile' => $request->mobile,
+            'full_name' => $user->getFullName(),
+            'email' => $user->getEmail(),
+            'mobile' => $user->getMobile(),
          ]);
     }
 
@@ -86,14 +87,18 @@ class UserController extends ApiController
             'password_repeat ' => ['min:6'],
         ]);
 
-        $this->userRepository->update($request->id, [
-            'password' => app('hash')->make($request->password),
-        ]);
+        try 
+        {   $user = $this->userRepository->update($request->id, [
+                'password' => app('hash')->make($request->password),
+            ]);
+        } catch (\Exception $th) {
+            return $this->respondInternalError('کاربر بروز رسانی نشد ');     
+        }
 
         return $this->respondSuccess('رمز عبور شما با موفقیت بروز رسانی شد', [
-            'full_name' => $request->full_name,
-            'email' => $request->email,
-            'mobile' => $request->mobile,
+            'full_name' => $user->getFullName(),
+            'email' => $user->getEmail(),
+            'mobile' => $user->getMobile(),
         ]);
     }
 
@@ -102,8 +107,12 @@ class UserController extends ApiController
     {
         $this->validate($request, ['id' => 'required']);
 
-        $this->userRepository->delete($request->id);
+         if(!$this->userRepository->find($request->id))
+            return $this->respondNotFound('کاربری با این ID وجود ندارد');
         
+        if(!$this->userRepository->delete($request->id))
+            return $this->respondInternalError('خطایی وجود دارد مجدد تلاش نمایید');
+
         return $this->respondSuccess('کاربر با موفقیت حذف شد', []);
 
     }

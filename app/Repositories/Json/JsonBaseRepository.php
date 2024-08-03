@@ -55,7 +55,7 @@ class JsonBaseRepository implements RepositorieInterface
 
     }
 
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         $users = json_decode(file_get_contents('users.json'), true);
 
@@ -68,11 +68,13 @@ class JsonBaseRepository implements RepositorieInterface
                 if(file_exists('users.json'))
                     unlink('users.json');
 
-                file_put_contents('users.json', json_encode($users));
-            break;
-        }
+                    file_put_contents('users.json', json_encode($users));
+                return true;
+            }
             
         }
+                return false;
+
     }
 
     public function deleteBy(array $where)
@@ -91,7 +93,7 @@ class JsonBaseRepository implements RepositorieInterface
     }
 
 
-    public function paginate(string $search = null, int $page, int $pagesize = 20)
+    public function paginate(string $search = null, int $page, int $pagesize = 20):array
     {
         $users = json_decode(file_get_contents(base_path() . '/users.json'), true);
 
