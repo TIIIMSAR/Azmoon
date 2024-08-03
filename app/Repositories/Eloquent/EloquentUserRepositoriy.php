@@ -17,7 +17,6 @@ class EloquentUserRepositoriy extends EloquentBaseRepositoriy implements UserRep
 
     public function create(array $data)
     {
-        // dd('4EloquentUserRepositoriy');
         $newUser = parent::create($data);
 
         return new UserEloquntEntity($newUser);

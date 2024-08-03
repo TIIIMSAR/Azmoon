@@ -10,8 +10,6 @@ class EloquentBaseRepositoriy implements RepositorieInterface
 
     public function create(array $data)
     {
-        dd($data);
-        // dd('5EloquentBaseRepositoriy');
        return $this->model::create($data);
     }   
 

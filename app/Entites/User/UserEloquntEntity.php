@@ -10,7 +10,6 @@ class UserEloquntEntity implements UserEntitiy
 
     public function __construct(User|null $user)
     {
-        // dd('6UserEloquntEntitiy');
         $this->user = $user;
     }
 

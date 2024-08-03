@@ -2,10 +2,20 @@
 
 namespace API\V1\Users;
 
+use App\Repositories\Contracts\UserRepositorieInterface;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
+    use DatabaseMigrations;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->artisan('migrate:refresh');
+    }
+
             // create
     public function test_should_create_a_new_users()
     {
@@ -39,9 +49,11 @@ class UserTest extends TestCase
             // update
     public function test_should_update_a_user()
     {
+        $user = $this->createUser()[0];
+
         $response = $this->call('PUT', 'api/v1/users', [
-            'id' => '882',
-            'full_name' => 'خمینی',
+            'id' => (string)$user->getId(),
+            'full_name' => 'hossein mohammadi',
             'email' => 'cosKIR@gmail.com',
             'mobile' => '0930098723',
         ]);    
@@ -69,8 +81,10 @@ class UserTest extends TestCase
             // update password
     public function test_should_update_password()
     {
+        $user = $this->createUser()[0];
+
         $response = $this->call('PUT', 'api/v1/users/change-password', [
-            'id' => '717',
+            'id' => (string)$user->getId(),
             'password' => '1234567890',
             'password_repeat' => '1234567890',
         ]);
@@ -97,8 +111,10 @@ class UserTest extends TestCase
             // delete password
     public function test_should_delete_a_user()
     {
+        $user = $this->createUser()[0];
+
         $response = $this->call('DELETE', 'api/v1/users/', [
-            'id' => '111111111111'
+            'id' => (string)$user->getId()
         ]);
 
         $this->assertEquals('200', $response->status());
@@ -112,6 +128,8 @@ class UserTest extends TestCase
     
     public function test_should_get_users()
     {
+        $user = $this->createUser(30);
+
         $pagesize = 3;
         $response = $this->call('GET', 'api/v1/users', [
             'page' => 1,
@@ -134,7 +152,7 @@ class UserTest extends TestCase
     public function test_should_get_filtered_users()
     {
         $pagesize = 3;
-        $userEmail = 'cosKIR@gmail.com';   
+        $userEmail = 'kafar@gmail.com';   
         $response = $this->call('GET', 'api/v1/users', [
             'search' => $userEmail,
             'page' => 1,
@@ -142,7 +160,8 @@ class UserTest extends TestCase
         ]);
 
         $data = json_decode($response->getContent(), true);
-            $this->assertEquals($data['data']['email'], $userEmail);
+            foreach($data['data'] as $user)
+                $this->assertEquals($user['email'], $userEmail);
 
         $this->assertEquals(200, $response->status());
         
@@ -153,4 +172,22 @@ class UserTest extends TestCase
         ]);
     }
 
+    private function createUser(int $count = 1): array
+    {
+        $userRepository = $this->app->make(UserRepositorieInterface::class);
+
+        $userData = [
+            'full_name' => '7azmoon',
+            'email' => '7azmoon@gmail.com',
+            'mobile' => '09391112222',
+        ];
+
+        $users = [];
+
+        foreach (range(0, $count) as $item) {
+            $users[] = $userRepository->create($userData);
+        }
+
+        return $users;
+    }
 }
