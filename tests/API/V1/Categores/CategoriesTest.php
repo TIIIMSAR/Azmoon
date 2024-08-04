@@ -2,6 +2,7 @@
 
 namespace API\V1\Users;
 
+use App\Repositories\Contracts\CategoryRepositorieInterface;
 use Tests\TestCase;
 
 class CategoriesTest extends TestCase
@@ -30,6 +31,42 @@ class CategoriesTest extends TestCase
                 'name',
                 'slug',
     ]]);
+    }
+
+    public function test_ensure_we_can_delete_category()
+    {
+        $category = $this->createCategories()[0];
+        
+        $response = $this->call('DELETE', 'api/v1/categories', [
+            'id' => (string)$category->getId() 
+        ]);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->seeJsonStructure([
+            'success',  
+            'message',
+            'data',
+        ]);
+    }
+
+
+    private function createCategories(int $count = 1): array
+    {
+        $categoryRepository = $this->app->make(CategoryRepositorieInterface::class);
+
+        $newCategory = [
+            'name' => 'new category',
+            'slug' => 'new category slug',
+        ];
+
+        $categories = [];
+
+        foreach(range(0, $count) as $item)
+        {
+           $categories[] = $categoryRepository->create($newCategory);
+        }
+
+        return $categories;
         
     }
 }
