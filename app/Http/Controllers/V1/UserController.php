@@ -36,7 +36,6 @@ class UserController extends ApiController
             'password' => ['required'],
          ]);
 
-
         $newUser = $this->userRepository->create([
             'full_name' => $request->full_name,
             'email' => $request->email,

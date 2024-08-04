@@ -110,7 +110,7 @@ class CategoriesTest extends TestCase
 
         $data = json_decode($response->getContent(), true);
             foreach($data['data'] as $category)
-                $this->assertEquals($category['slug'], $categoryName);
+                $this->assertEquals($category['email'], $categoryName);
 
         $this->assertEquals(200, $response->status());
         
