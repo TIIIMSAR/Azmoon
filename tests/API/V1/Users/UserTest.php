@@ -8,25 +8,28 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    use DatabaseMigrations;
+    // use DatabaseMigrations;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->artisan('migrate:refresh');
-    }
+    // public function setUp(): void
+    // {
+    //     parent::setUp();
+    //     $this->artisan('migrate:refresh');
+    // }
 
             // create
     public function test_should_create_a_new_users()
     {
-        $response = $this->call('POST', 'api/v1/users', [
+        $newUser = [
             'full_name' => 'hossein mohammadi',
             'email' => 'hossein_mohammadi@gmail.com',
             'mobile' => '0930098723',
             'password' => '123456',
-        ]);    
+        ];
+
+        $response = $this->call('POST', 'api/v1/users', $newUser);    
 
         $this->assertEquals(201, $response->status());
+        // $this->seeInDatabase('users', $newUser);
         $this->seeJsonStructure([
             'success',
             'message',
