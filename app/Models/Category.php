@@ -12,7 +12,7 @@ class Category extends Model
      * @var string[]
      */
     protected $fillable = [
-        'naem',
+        'name',
         'slug',
     ];
 

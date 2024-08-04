@@ -9,7 +9,7 @@ class EloquentBaseRepositoriy implements RepositorieInterface
     protected $model;
 
     public function create(array $data)
-    {
+    { 
        return $this->model::create($data);
     }   
 

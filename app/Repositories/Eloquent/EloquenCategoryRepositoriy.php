@@ -16,4 +16,13 @@ class EloquenCategoryRepositoriy extends EloquentBaseRepositoriy implements Cate
 
         return new CategoryEloquntEntity($createdCategory);
     } 
+
+    public function update(int $id, array $data)
+    {
+        if(!parent::update($id, $data))
+        {
+            throw new \Exception('دسته بندی بروز رسانی نشد');
+        }
+            return new CategoryEloquntEntity(parent::find($id));
+    }
 }

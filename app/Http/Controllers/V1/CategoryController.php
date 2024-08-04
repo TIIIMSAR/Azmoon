@@ -50,4 +50,28 @@ class CategoryController extends ApiController
 
     }
 
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'id' => ['required', 'numeric'],
+            'name' => 'required|string|min:2|max:255',
+            'slug' => 'required|string|min:2|max:255',
+        ]);
+
+        try {
+            $updatedUser = $this->categoryRepository->update($request->id, [
+                'name' => $request->name,
+                'slug' => $request->slug,
+            ]);
+        } catch (\Throwable $th) {
+            return $this->respondInternalError('دسته بندی ایجار نشد');
+        }  
+
+        return $this->respondSuccess('دسته بندی  بروز رسانی شد', [
+            'name' => $updatedUser->getName(),
+            'slug' => $updatedUser->getSlug()
+        ]);
+
+    }
+
 }

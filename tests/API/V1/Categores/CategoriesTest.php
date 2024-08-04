@@ -30,7 +30,7 @@ class CategoriesTest extends TestCase
             'data' => [
                 'name',
                 'slug',
-    ]]);
+      ]]);
     }
 
     public function test_ensure_we_can_delete_category()
@@ -49,6 +49,31 @@ class CategoriesTest extends TestCase
         ]);
     }
 
+    public function test_ensure_we_can_update_category()
+    {
+        $category = $this->createCategories()[0];
+
+        $categoryDate = [
+            'id' => (string)$category->getId(),
+            'name' =>$category->getName() . 'updated',
+            'slug' =>$category->getSlug() . '-updated',
+        ];
+
+        $response = $this->call('PUt', 'api/v1/categories', $categoryDate);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->seeInDatabase('categories', $categoryDate);
+        $this->seeJsonStructure([
+            'success',  
+            'message',
+            'data' => [
+                'name',
+                'slug'
+            ],
+        ]);
+
+
+    }
 
     private function createCategories(int $count = 1): array
     {
