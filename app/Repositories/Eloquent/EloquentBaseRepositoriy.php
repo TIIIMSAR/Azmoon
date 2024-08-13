@@ -57,7 +57,7 @@ class EloquentBaseRepositoriy implements RepositorieInterface
         return $this->model::find($id);
     }    
 
-    public function paginate(string $search = null, int $page, int $pagesize = 20): array
+    public function paginate(string $search = null, int $page, int $pagesize = 20,  array $columns = []): array
     {
         if(is_null($search))
         {
